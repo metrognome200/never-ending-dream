@@ -1,0 +1,29 @@
+{
+  "name": "never-ending-dream",
+  "version": "1.0.0",
+  "description": "A fully functional Telegram Mini App text adventure game",
+  "main": "backend/index.js",
+  "engines": {
+    "node": "18.x"
+  },
+  "scripts": {
+    "start": "node backend/index.js",
+    "dev": "nodemon backend/index.js",
+    "build": "node build.js",
+    "vercel-build": "node build.js",
+    "test": "echo 'No tests specified'"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "uuid": "^9.0.0",
+    "crypto": "^1.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": ["telegram", "mini-app", "game", "adventure"],
+  "author": "Game Developer",
+  "license": "MIT"
+} 

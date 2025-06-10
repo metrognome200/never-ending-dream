@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>Never Ending Dream</title>
+    
+    <!-- Telegram Web App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Preload critical assets -->
+    <link rel="preload" href="app.js" as="script">
+    <link rel="preload" href="assets/sounds/ambient.mp3" as="audio" crossorigin>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h2>Loading Never Ending Dream...</h2>
+            <p>Preparing your adventure</p>
+        </div>
+    </div>
+
+    <!-- Main Game Container -->
+    <div id="game-container" class="game-container hidden">
+        <!-- Header -->
+        <header class="game-header">
+            <div class="header-left">
+                <h1 class="game-title">🌲 Never Ending Dream</h1>
+            </div>
+            <div class="header-right">
+                <button id="menu-btn" class="menu-btn" aria-label="Menu">
+                    <span class="menu-icon">☰</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Game Output Area -->
+        <div id="game-output" class="game-output">
+            <div id="output-content" class="output-content">
+                <!-- Game text will be inserted here -->
+            </div>
+        </div>
+
+        <!-- Status Bar -->
+        <div id="status-bar" class="status-bar">
+            <div class="status-item">
+                <span class="status-icon">❤️</span>
+                <span id="health-display">100</span>
+            </div>
+            <div class="status-item">
+                <span class="status-icon">🍖</span>
+                <span id="hunger-display">0</span>
+            </div>
+            <div class="status-item">
+                <span class="status-icon">💧</span>
+                <span id="thirst-display">0</span>
+            </div>
+            <div class="status-item">
+                <span class="status-icon">😴</span>
+                <span id="fatigue-display">0</span>
+            </div>
+        </div>
+
+        <!-- Command Input Area -->
+        <div class="command-area">
+            <div class="input-container">
+                <input 
+                    type="text" 
+                    id="command-input" 
+                    class="command-input" 
+                    placeholder="Type a command..." 
+                    autocomplete="off"
+                    maxlength="100"
+                >
+                <button id="send-btn" class="send-btn" aria-label="Send Command">
+                    <span class="send-icon">➤</span>
+                </button>
+            </div>
+            
+            <!-- Quick Commands -->
+            <div class="quick-commands">
+                <button class="quick-cmd" data-command="look around">Look</button>
+                <button class="quick-cmd" data-command="inventory">Inventory</button>
+                <button class="quick-cmd" data-command="status">Status</button>
+                <button class="quick-cmd" data-command="help">Help</button>
+            </div>
+        </div>
+
+        <!-- Menu Overlay -->
+        <div id="menu-overlay" class="menu-overlay hidden">
+            <div class="menu-content">
+                <div class="menu-header">
+                    <h2>Game Menu</h2>
+                    <button id="close-menu" class="close-btn" aria-label="Close Menu">×</button>
+                </div>
+                
+                <div class="menu-sections">
+                    <div class="menu-section">
+                        <h3>Player Info</h3>
+                        <div id="player-stats" class="player-stats">
+                            <!-- Player stats will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="menu-section">
+                        <h3>Skills</h3>
+                        <div id="skills-display" class="skills-display">
+                            <!-- Skills will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="menu-section">
+                        <h3>Achievements</h3>
+                        <div id="achievements-display" class="achievements-display">
+                            <!-- Achievements will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="menu-section">
+                        <h3>Settings</h3>
+                        <div class="settings">
+                            <label class="setting-item">
+                                <input type="checkbox" id="sound-toggle" checked>
+                                <span>Sound Effects</span>
+                            </label>
+                            <label class="setting-item">
+                                <input type="checkbox" id="music-toggle" checked>
+                                <span>Background Music</span>
+                            </label>
+                            <label class="setting-item">
+                                <input type="checkbox" id="animations-toggle" checked>
+                                <span>Animations</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-actions">
+                    <button id="reset-game" class="menu-btn danger">Reset Game</button>
+                    <button id="export-save" class="menu-btn">Export Save</button>
+                    <button id="import-save" class="menu-btn">Import Save</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirmation Dialog -->
+        <div id="confirm-dialog" class="confirm-dialog hidden">
+            <div class="confirm-content">
+                <h3 id="confirm-title">Confirm Action</h3>
+                <p id="confirm-message">Are you sure you want to perform this action?</p>
+                <div class="confirm-actions">
+                    <button id="confirm-yes" class="confirm-btn primary">Yes</button>
+                    <button id="confirm-no" class="confirm-btn">No</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievement Popup -->
+        <div id="achievement-popup" class="achievement-popup hidden">
+            <div class="achievement-content">
+                <div class="achievement-icon">🏆</div>
+                <h3 id="achievement-title">Achievement Unlocked!</h3>
+                <p id="achievement-description">You've unlocked a new achievement!</p>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="game-over-screen" class="game-over-screen hidden">
+            <div class="game-over-content">
+                <h2 id="game-over-title">Game Over</h2>
+                <p id="game-over-message">Your adventure has ended.</p>
+                <div class="game-over-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Commands Used:</span>
+                        <span id="final-commands" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Locations Visited:</span>
+                        <span id="final-locations" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Achievements:</span>
+                        <span id="final-achievements" class="stat-value">0</span>
+                    </div>
+                </div>
+                <div class="game-over-actions">
+                    <button id="restart-game" class="game-over-btn primary">Start New Game</button>
+                    <button id="view-stats" class="game-over-btn">View Statistics</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="ambient-sound" loop>
+        <source src="assets/sounds/ambient.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="click-sound">
+        <source src="assets/sounds/click.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="achievement-sound">
+        <source src="assets/sounds/achievement.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html> 
